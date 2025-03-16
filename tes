@@ -6,49 +6,124 @@
  *   3) setColor, setFont, setFontSize
  *   4) prompt (input user)
  */
+(function(){
+  /**
+   * Fungsi require sederhana untuk memuat library JS secara sinkron.
+   * Library akan dimuat dari URL: https://js.rasitech.org/package/namalib.js
+   * Catatan: Penggunaan XMLHttpRequest secara sinkron sudah tidak direkomendasikan,
+   * tetapi digunakan di sini untuk keperluan demo.
+   */
+  function require(libName) {
+    var url = "https://js.rasitech.org/package/" + libName + ".js";
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, false); // Permintaan sinkron
+    xhr.send(null);
+    if (xhr.status === 200) {
+      // Evaluasi kode library yang didapatkan
+      eval(xhr.responseText);
+      // Asumsikan library menempel ke window dengan nama libName
+      return window[libName];
+    } else {
+      console.error("Gagal memuat library: " + libName);
+      return null;
+    }
+  }
 
-// 1) Coba panggil require(...) untuk memicu pemuatan library
-//    Pastikan library "someLib.js" ada di https://js.rasitech.org/package/someLib.js
-const someLib = require("someLib");
+  /**
+   * Fungsi setColor untuk mengubah warna teks.
+   * Jika textFilter disediakan, hanya bagian teks yang cocok dengan filter yang diubah warnanya.
+   */
+  function setColor(selector, color, textFilter) {
+    var elements = document.querySelectorAll(selector);
+    elements.forEach(function(el) {
+      if (textFilter) {
+        var regex = new RegExp(textFilter, "g");
+        el.innerHTML = el.innerHTML.replace(regex, '<span style="color:' + color + ';">' + textFilter + '</span>');
+      } else {
+        el.style.color = color;
+      }
+    });
+  }
 
-// Asumsikan someLib menambahkan window.someLib = {...} di global
-// Coba panggil fungsinya (jika ada)
-if (window.someLib && window.someLib.testFunction) {
-  console.log("someLib.testFunction() -> " + window.someLib.testFunction());
-} else {
-  console.log("someLib loaded, but no 'testFunction' found. Skipping...");
-}
+  /**
+   * Fungsi setFont untuk mengubah jenis huruf.
+   * Jika textFilter disediakan, hanya bagian teks yang cocok dengan filter yang diubah font-nya.
+   */
+  function setFont(selector, font, textFilter) {
+    var elements = document.querySelectorAll(selector);
+    elements.forEach(function(el) {
+      if (textFilter) {
+        var regex = new RegExp(textFilter, "g");
+        el.innerHTML = el.innerHTML.replace(regex, '<span style="font-family:' + font + ';">' + textFilter + '</span>');
+      } else {
+        el.style.fontFamily = font;
+      }
+    });
+  }
 
-// 2) console.log(...) biasa
-console.log("Menjalankan allFeaturesDemo.js ...");
+  /**
+   * Fungsi setFontSize untuk mengubah ukuran huruf.
+   * Jika textFilter disediakan, hanya bagian teks yang cocok dengan filter yang diubah ukurannya.
+   */
+  function setFontSize(selector, size, textFilter) {
+    var elements = document.querySelectorAll(selector);
+    elements.forEach(function(el) {
+      if (textFilter) {
+        var regex = new RegExp(textFilter, "g");
+        el.innerHTML = el.innerHTML.replace(regex, '<span style="font-size:' + size + 'px;">' + textFilter + '</span>');
+      } else {
+        el.style.fontSize = size + "px";
+      }
+    });
+  }
 
-// 3) Menambahkan konten ke halaman untuk demonstrasi setColor/setFont/setFontSize
-document.body.innerHTML += `
-  <div id="demo-section">
-    <p>Ini paragraf pertama. Kata "merah" di sini: merah</p>
-    <p class="special">Ini paragraf kedua. Kata "besar" di sini: besar</p>
-    <p>Kalimat ini mengandung kata "filter" yang akan kita ubah.</p>
-  </div>
-`;
+  // Ekspor fungsi-fungsi ke objek global (window)
+  window.require = require;
+  window.setColor = setColor;
+  window.setFont = setFont;
+  window.setFontSize = setFontSize;
 
-// 4) Demonstrasi setColor, setFont, setFontSize
-console.log("Mewarnai kata 'merah' jadi merah di semua <p>...");
-setColor("p", "red", "merah");
+  // --- DEMO PENGGUNAAN LIBRARY ---
 
-console.log("Mengganti font kata 'besar' di .special menjadi 'Arial'...");
-setFont(".special", "Arial", "besar");
+  // 1) Panggil require(...) untuk memuat library "someLib.js"
+  // Pastikan file someLib.js ada di https://js.rasitech.org/package/someLib.js
+  const someLib = require("someLib");
 
-console.log("Mengubah font size kata 'filter' di <p> menjadi 24px...");
-setFontSize("p", 24, "filter");
+  // Asumsikan someLib menambahkan window.someLib ke global
+  if (window.someLib && window.someLib.testFunction) {
+    console.log("someLib.testFunction() -> " + window.someLib.testFunction());
+  } else {
+    console.log("someLib loaded, but no 'testFunction' found. Skipping...");
+  }
 
-// 5) Tanpa textFilter: ubah seluruh <body> menjadi hijau
-console.log("Mengubah seluruh teks <body> menjadi hijau (tanpa textFilter)...");
-setColor("body", "green");
+  // 2) Contoh penggunaan console.log biasa
+  console.log("Menjalankan allFeaturesDemo.js ...");
 
-// 6) Gunakan prompt untuk input user
-console.log("Menanyakan kabar user...");
-const userAnswer = prompt("Bagaimana kabar Anda hari ini?");
-console.log("User menjawab: " + userAnswer);
+  // 3) Tampilkan konten demo melalui console.log
+  console.log("Demo Section:\n" +
+              " - Ini paragraf pertama. Kata \"merah\" di sini: merah\n" +
+              " - Ini paragraf kedua. Kata \"besar\" di sini: besar\n" +
+              " - Kalimat ini mengandung kata \"filter\" yang akan kita ubah.");
 
-// 7) Selesai
-console.log("Selesai demonstrasi allFeaturesDemo.js.");
+  // 4) Demonstrasi fungsi-fungsi pengubahan tampilan
+  console.log("Mewarnai kata 'merah' jadi merah di semua <p>...");
+  setColor("p", "red", "merah");
+
+  console.log("Mengganti font kata 'besar' di .special menjadi 'Arial'...");
+  setFont(".special", "Arial", "besar");
+
+  console.log("Mengubah font size kata 'filter' di <p> menjadi 24px...");
+  setFontSize("p", 24, "filter");
+
+  // 5) Jika tanpa textFilter, ubah seluruh <body> menjadi hijau
+  console.log("Mengubah seluruh teks <body> menjadi hijau (tanpa textFilter)...");
+  setColor("body", "green");
+
+  // 6) Gunakan prompt untuk menanyakan kabar user
+  console.log("Menanyakan kabar user...");
+  const userAnswer = prompt("Bagaimana kabar Anda hari ini?");
+  console.log("User menjawab: " + userAnswer);
+
+  // 7) Selesai demonstrasi
+  console.log("Selesai demonstrasi allFeaturesDemo.js.");
+})();
