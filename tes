@@ -1,40 +1,54 @@
 /*
- * exampleScript.js
- * Demonstrasi penggunaan setColor, setFont, setFontSize (dengan textFilter).
+ * allFeaturesDemo.js
+ * Menunjukkan pemakaian semua fitur:
+ *   1) require("someLib")
+ *   2) console.log(...)
+ *   3) setColor, setFont, setFontSize
+ *   4) prompt (input user)
  */
 
-// 1) Tampilkan beberapa teks di halaman (untuk diubah style-nya)
+// 1) Coba panggil require(...) untuk memicu pemuatan library
+//    Pastikan library "someLib.js" ada di https://js.rasitech.org/package/someLib.js
+const someLib = require("someLib");
+
+// Asumsikan someLib menambahkan window.someLib = {...} di global
+// Coba panggil fungsinya (jika ada)
+if (window.someLib && window.someLib.testFunction) {
+  console.log("someLib.testFunction() -> " + window.someLib.testFunction());
+} else {
+  console.log("someLib loaded, but no 'testFunction' found. Skipping...");
+}
+
+// 2) console.log(...) biasa
+console.log("Menjalankan allFeaturesDemo.js ...");
+
+// 3) Menambahkan konten ke halaman untuk demonstrasi setColor/setFont/setFontSize
 document.body.innerHTML += `
-  <div class="demo-container">
-    <p>Ini paragraf pertama. Terdapat kata "merah" di sini: merah</p>
+  <div id="demo-section">
+    <p>Ini paragraf pertama. Kata "merah" di sini: merah</p>
     <p class="special">Ini paragraf kedua. Kata "besar" di sini: besar</p>
     <p>Kalimat ini mengandung kata "filter" yang akan kita ubah.</p>
   </div>
 `;
 
-// 2) Logging awal
-console.log("Memulai demo setColor, setFont, setFontSize...");
-
-// 3) Mewarnai kata "merah" dengan merah di seluruh paragraf
-console.log("Mewarnai kata 'merah' di semua paragraf menjadi merah:");
+// 4) Demonstrasi setColor, setFont, setFontSize
+console.log("Mewarnai kata 'merah' jadi merah di semua <p>...");
 setColor("p", "red", "merah");
 
-// 4) Mengubah font kata "besar" di paragraf .special menjadi "Arial"
-console.log("Mengganti font 'besar' di .special menjadi Arial:");
+console.log("Mengganti font kata 'besar' di .special menjadi 'Arial'...");
 setFont(".special", "Arial", "besar");
 
-// 5) Mengubah ukuran font kata "filter" di semua paragraf menjadi 24px
-console.log("Mengubah ukuran font kata 'filter' di <p> menjadi 24px:");
+console.log("Mengubah font size kata 'filter' di <p> menjadi 24px...");
 setFontSize("p", 24, "filter");
 
-// 6) Tanpa textFilter: Ubah warna body menjadi hijau
-console.log("Mengubah seluruh teks <body> menjadi hijau (tanpa filter):");
+// 5) Tanpa textFilter: ubah seluruh <body> menjadi hijau
+console.log("Mengubah seluruh teks <body> menjadi hijau (tanpa textFilter)...");
 setColor("body", "green");
 
-// 7) Tanyakan kabar user (menggunakan prompt bawaan browser)
+// 6) Gunakan prompt untuk input user
 console.log("Menanyakan kabar user...");
-const jawaban = prompt("Bagaimana kabar Anda hari ini?");
-console.log("User menjawab: " + jawaban);
+const userAnswer = prompt("Bagaimana kabar Anda hari ini?");
+console.log("User menjawab: " + userAnswer);
 
-// 8) Selesai
-console.log("Selesai demonstrasi script eksternal.");
+// 7) Selesai
+console.log("Selesai demonstrasi allFeaturesDemo.js.");
