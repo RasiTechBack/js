@@ -1,0 +1,22 @@
+/*
+ * externalScript.js
+ * Full example script yang mengintegrasikan library examplelib.
+ */
+
+// Baris require akan dideteksi oleh sistem untuk memuat file:
+// https://js.rasitech.org/package/examplelib.js
+const lib = require("examplelib");
+
+// Tampilkan versi library
+console.log("Menggunakan library examplelib versi: " + lib.version);
+
+// Tampilkan pesan sapaan dengan nama pengguna yang ditentukan
+const namaPengguna = "Alice";
+console.log(lib.greet(namaPengguna));
+
+// Lakukan operasi perkalian menggunakan fungsi multiply
+const a = 5, b = 7;
+console.log(`Hasil perkalian ${a} * ${b} = ${lib.multiply(a, b)}`);
+
+// Pesan akhir sebagai indikasi script telah dijalankan
+console.log("Script eksternal telah dijalankan dengan sukses.");
