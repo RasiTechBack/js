@@ -1,22 +1,54 @@
 /*
- * externalScript.js
- * Full example script yang mengintegrasikan library examplelib.
+ * customScript.js
+ * Contoh script eksternal yang mendefinisikan fungsi:
+ *   setColor, setFont, setFontSize, askQuestion
+ * dan memanggil console.log untuk menampilkan output di emulator CMD.
  */
 
-// Baris require akan dideteksi oleh sistem untuk memuat file:
-// https://js.rasitech.org/package/examplelib.js
-const lib = require("examplelib");
+// Definisikan fungsi global
+window.setColor = function(selector, color) {
+  // Mengubah CSS color pada elemen
+  document.querySelectorAll(selector).forEach(el => {
+    el.style.color = color;
+  });
+};
 
-// Tampilkan versi library
-console.log("Menggunakan library examplelib versi: " + lib.version);
+window.setFont = function(selector, fontName) {
+  // Mengubah font-family
+  document.querySelectorAll(selector).forEach(el => {
+    el.style.fontFamily = fontName;
+  });
+};
 
-// Tampilkan pesan sapaan dengan nama pengguna yang ditentukan
-const namaPengguna = "Alice";
-console.log(lib.greet(namaPengguna));
+window.setFontSize = function(selector, size) {
+  // Mengubah font-size (dalam pixel)
+  document.querySelectorAll(selector).forEach(el => {
+    el.style.fontSize = size + "px";
+  });
+};
 
-// Lakukan operasi perkalian menggunakan fungsi multiply
-const a = 5, b = 7;
-console.log(`Hasil perkalian ${a} * ${b} = ${lib.multiply(a, b)}`);
+window.askQuestion = function(question) {
+  // Menggunakan prompt bawaan browser (blocking)
+  // Return jawaban user
+  return prompt(question);
+};
 
-// Pesan akhir sebagai indikasi script telah dijalankan
-console.log("Script eksternal telah dijalankan dengan sukses.");
+// ---------------------------------------
+// Demonstrasi pemanggilan
+// ---------------------------------------
+
+console.log("Memulai script custom...");
+
+// Ubah warna teks body jadi kuning
+setColor("body", "yellow");
+// Ubah font body jadi "Arial"
+setFont("body", "Arial");
+// Ubah ukuran font body jadi 20px
+setFontSize("body", 20);
+
+// Tanyakan ke user
+const jawaban = askQuestion("Apa kabar hari ini?");
+console.log("User menjawab: " + jawaban);
+
+// Selesai
+console.log("Script custom selesai dijalankan.");
