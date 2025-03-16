@@ -1,54 +1,63 @@
 /*
  * customScript.js
- * Contoh script eksternal yang mendefinisikan fungsi:
- *   setColor, setFont, setFontSize, askQuestion
- * dan memanggil console.log untuk menampilkan output di emulator CMD.
+ * Mendefinisikan fungsi untuk set warna, font, font-size
+ * pada seluruh elemen maupun pada teks tertentu saja.
  */
 
-// Definisikan fungsi global
-window.setColor = function(selector, color) {
-  // Mengubah CSS color pada elemen
-  document.querySelectorAll(selector).forEach(el => {
-    el.style.color = color;
-  });
-};
+(function(global) {
+  'use strict';
 
-window.setFont = function(selector, fontName) {
-  // Mengubah font-family
-  document.querySelectorAll(selector).forEach(el => {
-    el.style.fontFamily = fontName;
-  });
-};
+  // 1) Mengubah warna teks seluruh elemen yang match selector
+  global.setColor = function(selector, color) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.color = color;
+    });
+  };
 
-window.setFontSize = function(selector, size) {
-  // Mengubah font-size (dalam pixel)
-  document.querySelectorAll(selector).forEach(el => {
-    el.style.fontSize = size + "px";
-  });
-};
+  // 2) Mengubah font-family seluruh elemen yang match selector
+  global.setFont = function(selector, fontName) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.fontFamily = fontName;
+    });
+  };
 
-window.askQuestion = function(question) {
-  // Menggunakan prompt bawaan browser (blocking)
-  // Return jawaban user
-  return prompt(question);
-};
+  // 3) Mengubah ukuran font (px) seluruh elemen yang match selector
+  global.setFontSize = function(selector, size) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.fontSize = size + "px";
+    });
+  };
 
-// ---------------------------------------
-// Demonstrasi pemanggilan
-// ---------------------------------------
+  // 4) Mengubah style hanya pada teks tertentu (substring) di dalam elemen
+  global.setCustomStyleForText = function(selector, targetText, color, fontName, fontSize) {
+    // Naif: ganti semua kemunculan targetText di innerHTML
+    // dengan <span style="...">targetText</span>
+    // Peringatan: bisa "merusak" markup jika targetText berada di tag lain
+    const styledSpan = `<span style="color:${color}; font-family:${fontName}; font-size:${fontSize}px;">${targetText}</span>`;
+    const re = new RegExp(targetText, 'g'); // cari semua substring yang cocok
 
-console.log("Memulai script custom...");
+    document.querySelectorAll(selector).forEach(el => {
+      el.innerHTML = el.innerHTML.replace(re, styledSpan);
+    });
+  };
 
-// Ubah warna teks body jadi kuning
-setColor("body", "yellow");
-// Ubah font body jadi "Arial"
-setFont("body", "Arial");
-// Ubah ukuran font body jadi 20px
-setFontSize("body", 20);
+  // -------------------------------------------------------
+  // Demonstrasi
+  // -------------------------------------------------------
+  console.log("Memulai customScript.js ...");
 
-// Tanyakan ke user
-const jawaban = askQuestion("Apa kabar hari ini?");
-console.log("User menjawab: " + jawaban);
+  // 1) Ubah warna body menjadi "lightgreen"
+  setColor("body", "lightgreen");
 
-// Selesai
-console.log("Script custom selesai dijalankan.");
+  // 2) Ubah font body menjadi "Georgia"
+  setFont("body", "Georgia");
+
+  // 3) Ubah font-size body menjadi 18px
+  setFontSize("body", 18);
+
+  // 4) Ganti substring "CMD" di <body> dengan warna merah, font Courier, size 24
+  setCustomStyleForText("body", "CMD", "red", "Courier New", 24);
+
+  // Pesan akhir
+  console.log("Selesai mengubah style melalui customScript.js");
+})(this);
