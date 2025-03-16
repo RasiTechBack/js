@@ -1,63 +1,40 @@
-/* 
- * customScript.js
- * Mendefinisikan fungsi untuk set warna, font, font-size
- * pada seluruh elemen maupun pada teks tertentu saja.
+/*
+ * exampleScript.js
+ * Demonstrasi penggunaan setColor, setFont, setFontSize (dengan textFilter).
  */
 
-(function(global) {
-  'use strict';
+// 1) Tampilkan beberapa teks di halaman (untuk diubah style-nya)
+document.body.innerHTML += `
+  <div class="demo-container">
+    <p>Ini paragraf pertama. Terdapat kata "merah" di sini: merah</p>
+    <p class="special">Ini paragraf kedua. Kata "besar" di sini: besar</p>
+    <p>Kalimat ini mengandung kata "filter" yang akan kita ubah.</p>
+  </div>
+`;
 
-  // 1) Mengubah warna teks seluruh elemen yang match selector
-  global.setColor = function(selector, color) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.style.color = color;
-    });
-  };
+// 2) Logging awal
+console.log("Memulai demo setColor, setFont, setFontSize...");
 
-  // 2) Mengubah font-family seluruh elemen yang match selector
-  global.setFont = function(selector, fontName) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.style.fontFamily = fontName;
-    });
-  };
+// 3) Mewarnai kata "merah" dengan merah di seluruh paragraf
+console.log("Mewarnai kata 'merah' di semua paragraf menjadi merah:");
+setColor("p", "red", "merah");
 
-  // 3) Mengubah ukuran font (px) seluruh elemen yang match selector
-  global.setFontSize = function(selector, size) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.style.fontSize = size + "px";
-    });
-  };
+// 4) Mengubah font kata "besar" di paragraf .special menjadi "Arial"
+console.log("Mengganti font 'besar' di .special menjadi Arial:");
+setFont(".special", "Arial", "besar");
 
-  // 4) Mengubah style hanya pada teks tertentu (substring) di dalam elemen
-  global.setCustomStyleForText = function(selector, targetText, color, fontName, fontSize) {
-    // Naif: ganti semua kemunculan targetText di innerHTML
-    // dengan <span style="...">targetText</span>
-    // Peringatan: bisa "merusak" markup jika targetText berada di tag lain
-    const styledSpan = `<span style="color:${color}; font-family:${fontName}; font-size:${fontSize}px;">${targetText}</span>`;
-    const re = new RegExp(targetText, 'g'); // cari semua substring yang cocok
+// 5) Mengubah ukuran font kata "filter" di semua paragraf menjadi 24px
+console.log("Mengubah ukuran font kata 'filter' di <p> menjadi 24px:");
+setFontSize("p", 24, "filter");
 
-    document.querySelectorAll(selector).forEach(el => {
-      el.innerHTML = el.innerHTML.replace(re, styledSpan);
-    });
-  };
+// 6) Tanpa textFilter: Ubah warna body menjadi hijau
+console.log("Mengubah seluruh teks <body> menjadi hijau (tanpa filter):");
+setColor("body", "green");
 
-  // -------------------------------------------------------
-  // Demonstrasi
-  // -------------------------------------------------------
-  console.log("Memulai customScript.js ...");
+// 7) Tanyakan kabar user (menggunakan prompt bawaan browser)
+console.log("Menanyakan kabar user...");
+const jawaban = prompt("Bagaimana kabar Anda hari ini?");
+console.log("User menjawab: " + jawaban);
 
-  // 1) Ubah warna body menjadi "lightgreen"
-  setColor("body", "lightgreen");
-
-  // 2) Ubah font body menjadi "Georgia"
-  setFont("body", "Georgia");
-
-  // 3) Ubah font-size body menjadi 18px
-  setFontSize("body", 18);
-
-  // 4) Ganti substring "CMD" di <body> dengan warna merah, font Courier, size 24
-  setCustomStyleForText("body", "CMD", "red", "Courier New", 24);
-
-  // Pesan akhir
-  console.log("Selesai mengubah style melalui customScript.js");
-})(this);
+// 8) Selesai
+console.log("Selesai demonstrasi script eksternal.");
