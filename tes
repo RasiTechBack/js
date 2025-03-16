@@ -1,7 +1,7 @@
 /*
  * allFeaturesDemo.js
  * Menunjukkan pemakaian semua fitur:
- *   1) require("someLib")
+ *   1) require("someLib") 
  *   2) console.log(...)
  *   3) setColor, setFont, setFontSize
  *   4) prompt (input user)
